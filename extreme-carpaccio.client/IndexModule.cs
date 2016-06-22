@@ -23,6 +23,11 @@ namespace xCarpaccio.client
 
                 var order = this.Bind<Order>();
                 Bill bill = new Bill();
+                if (order.Prices == null || order.Quantities == null || order.Country == "" || order.Reduction == null)
+                {
+                    bill = null;
+                    return bill;
+                }
                 bill.total = 0;
                 int compteurQuantities = order.Quantities.Length;
                 int compteurPrices = order.Prices.Length;
@@ -33,6 +38,11 @@ namespace xCarpaccio.client
                     {
                         bill.total = bill.total + (order.Quantities[i]*order.Prices[i]);
                     }
+                }
+                else
+                {
+                    bill = null;
+                    return bill;
                 }
 
                 //TODO: do something with order and return a bill if possible
