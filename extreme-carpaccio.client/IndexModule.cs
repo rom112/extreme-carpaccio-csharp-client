@@ -24,11 +24,15 @@ namespace xCarpaccio.client
                 var order = this.Bind<Order>();
                 Bill bill = new Bill();
                 bill.total = 0;
-                int compteur = order.Quantities.Length;
+                int compteurQuantities = order.Quantities.Length;
+                int compteurPrices = order.Prices.Length;
 
-                for (int i = 0; i <= compteur-1; i++)
+                if (compteurQuantities == compteurPrices)
                 {
-                    bill.total = bill.total + (order.Quantities[i] * order.Prices[i]);
+                    for (int i = 0; i <= compteurQuantities - 1; i++)
+                    {
+                        bill.total = bill.total + (order.Quantities[i]*order.Prices[i]);
+                    }
                 }
 
                 //TODO: do something with order and return a bill if possible
@@ -91,29 +95,32 @@ namespace xCarpaccio.client
                 {
                     bill.total = bill.total*taxes;
 
-                    if (bill.total >= 50000)
+                    if (order.Reduction != "PAY THE PRICE")
                     {
-                        bill.total = bill.total - (bill.total * Convert.ToDecimal(0.15));
-                    }
+                        if (bill.total >= 50000)
+                        {
+                            bill.total = bill.total - (bill.total*Convert.ToDecimal(0.15));
+                        }
 
-                    if (bill.total >= 10000 && bill.total < 50000)
-                    {
-                        bill.total = bill.total - (bill.total * Convert.ToDecimal(0.10));
-                    }
+                        if (bill.total >= 10000 && bill.total < 50000)
+                        {
+                            bill.total = bill.total - (bill.total*Convert.ToDecimal(0.10));
+                        }
 
-                    if (bill.total >= 7000 && bill.total < 10000)
-                    {
-                        bill.total = bill.total - (bill.total * Convert.ToDecimal(0.07));
-                    }
+                        if (bill.total >= 7000 && bill.total < 10000)
+                        {
+                            bill.total = bill.total - (bill.total*Convert.ToDecimal(0.07));
+                        }
 
-                    if (bill.total >= 5000 && bill.total < 7000)
-                    {
-                        bill.total = bill.total - (bill.total * Convert.ToDecimal(0.05));
-                    }
+                        if (bill.total >= 5000 && bill.total < 7000)
+                        {
+                            bill.total = bill.total - (bill.total*Convert.ToDecimal(0.05));
+                        }
 
-                    if (bill.total >= 1000 && bill.total < 5000)
-                    {
-                        bill.total = bill.total - (bill.total * Convert.ToDecimal(0.03));
+                        if (bill.total >= 1000 && bill.total < 5000)
+                        {
+                            bill.total = bill.total - (bill.total*Convert.ToDecimal(0.03));
+                        }
                     }
                     return bill;
                 }
